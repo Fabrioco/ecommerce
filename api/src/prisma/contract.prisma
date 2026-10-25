@@ -1,0 +1,68 @@
+// use prisma-8
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  CANCELED
+}
+
+model User {
+  id        String   @id 
+  email     String   @unique
+  name      String?
+  password String
+  createdAt TimestamptzString @default(now())
+  updatedAt TimestamptzString @onUpdate(now())
+  store Store?
+  orders Order[]
+}
+
+model Store {
+  id String @id
+  name String 
+  ownerId String @unique
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  createdAt TimestamptzString @default(now())
+  updatedAt TimestamptzString @onUpdate(now())
+  product Products[] 
+  orders Order[]
+}
+
+model Products {
+  id String @id 
+  storeId String
+  store Store @relation(fields: [storeId], references: [id])
+  title String
+  description String?
+  priceCents Int 
+  stock Int
+  imageUrl String?
+  active Boolean @default(true)
+  createdAt TimestamptzString @default(now())
+  orderItems OrderItem[]
+}
+
+model Order {
+  id String @id
+  buyerId String
+  buyer User @relation(fields: [buyerId], references: [id])
+  storeId String
+  store Store @relation(fields: [storeId], references: [id])
+  status OrderStatus @default(PENDING)
+  totalCents Int
+  createdAt TimestamptzString @default(now())
+  updatedAt TimestamptzString @onUpdate(now())
+  item OrderItem[] 
+}
+
+model OrderItem {
+  id String @id
+  orderId String 
+  order Order @relation(fields: [orderId], references: [id])
+  productId String 
+  product Products @relation(fields: [productId], references: [id])
+  quantity Int
+  unitPriceCents Int
+  productTitle String
+}

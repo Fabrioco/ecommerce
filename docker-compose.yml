@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ecommerce-db
+    environment:
+      POSTGRES_USER: user-market
+      POSTGRES_PASSWORD: db-market-pass
+      POSTGRES_DB: db-market
+    volumes:
+      - db_data:/var/lib/postgresql/data 
+    ports:
+      - "5432:5432"
+
+volumes:
+  db_data:
