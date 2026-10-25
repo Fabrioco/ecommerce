@@ -13,7 +13,7 @@ model User {
   name      String?
   password String
   createdAt TimestamptzString @default(now())
-  updatedAt TimestamptzString @onUpdate(now())
+  updatedAt temporal.updatedAtString()
   store Store?
   orders Order[]
 }
@@ -24,7 +24,7 @@ model Store {
   ownerId String @unique
   owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   createdAt TimestamptzString @default(now())
-  updatedAt TimestamptzString @onUpdate(now())
+  updatedAt temporal.updatedAtString()
   product Products[] 
   orders Order[]
 }
@@ -52,7 +52,7 @@ model Order {
   status OrderStatus @default(PENDING)
   totalCents Int
   createdAt TimestamptzString @default(now())
-  updatedAt TimestamptzString @onUpdate(now())
+  updatedAt temporal.updatedAtString()
   item OrderItem[] 
 }
 
