@@ -25,7 +25,7 @@ import type {
 export type StorageHash =
   StorageHashBase<'e3a6a634b27907ade6ffc0fc329d430bc62680d7b337efb8c00cd543ffaed7ae'>;
 export type ExecutionHash =
-  ExecutionHashBase<'8be557db4e581120c24bc31b297397eaaf733fa45857b9b5b902380080e68870'>;
+  ExecutionHashBase<'f6deb31874ff01fe7fef34da589c4c149415baa80aad84e0dd5c348d5e6743a7'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -1201,6 +1201,7 @@ type ContractBase = Omit<
     readonly mutations: {
       readonly defaults: readonly [
         {
+          readonly onCreate: { readonly id: 'timestamptzStringNow'; readonly kind: 'generator' };
           readonly onUpdate: { readonly id: 'timestamptzStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Order';
@@ -1209,6 +1210,7 @@ type ContractBase = Omit<
           };
         },
         {
+          readonly onCreate: { readonly id: 'timestamptzStringNow'; readonly kind: 'generator' };
           readonly onUpdate: { readonly id: 'timestamptzStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Store';
@@ -1217,6 +1219,7 @@ type ContractBase = Omit<
           };
         },
         {
+          readonly onCreate: { readonly id: 'timestamptzStringNow'; readonly kind: 'generator' };
           readonly onUpdate: { readonly id: 'timestamptzStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'User';
