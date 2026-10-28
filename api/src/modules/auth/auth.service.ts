@@ -1,8 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { RegisterUser } from './dtos/register-user.dto.js';
 import { TokenService } from './services/token.service.js';
 import { HashService } from './services/hash.service.js';
+import { LoginUserDto } from './dtos/login-user.dto.js';
 
 @Injectable()
 export class AuthService {
@@ -53,5 +54,44 @@ export class AuthService {
         updatedAt: newUser.updatedAt,
       },
     };
+  }
+
+  async login(dto: LoginUserDto) {
+    const existingUser = await this.prisma.db.User.where({
+      email: dto.email,
+    }).first();
+
+    if(!existingUser) {
+      throw new UnauthorizedException('Email ou senha inválidos.')
+    }
+
+    const comparedPassword = this.hash.comparePassword(dto.password, existingUser.password)
+
+    if(!comparedPassword) {
+      throw new UnauthorizedException('Email ou senha Inválidos.')
+    }
+
+    const payload = {
+      sub: existingUser.id,
+      name: existingUser.name!,
+      email: existingUser.email
+    }
+
+    const accessToken = this.token.generateAccessToken(payload)
+    const refreshToken = this.token.generateRefreshToken({
+      sub: payload.sub
+    })
+
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        id: existingUser.id,
+        name: existingUser.name,
+        email: existingUser.email,
+        createdAt: existingUser.createdAt,
+        updatedAt: existingUser.updatedAt,
+      }
+    }
   }
 }
